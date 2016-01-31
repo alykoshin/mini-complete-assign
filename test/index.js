@@ -6,90 +6,7 @@ var chai = require('chai');
 //var should = chai.should();
 var expect = chai.expect;
 
-var miniAssign = require('../');
-
-
-describe('#assign()', function() {
-
-
-  it('expect assign() to copy own properties', function() {
-
-    var obj1 = {
-      prop1: 'prop1',
-      prop2: 'prop2',
-      prop3: {
-        prop31: 'prop31'
-      },
-      prop5: {
-        prop51: 'prop51',
-        prop52: 'prop52'
-      }
-    };
-    var obj2 = {
-      prop2: 'prop2',
-      prop4: {
-        prop41: 'prop41'
-      },
-      prop5: {
-        prop52: 'prop52',
-        prop53: 'prop53'
-      }
-    };
-    var res = {};
-
-    miniAssign.assign(res, obj1);
-    expect(res).eql(obj1);
-
-    miniAssign.assign(res, obj2);
-    expect(res).contains(obj2);
-
-  });
-
-
-  it('should assign() not copy prototype properties', function() {
-
-    var Obj = function() {
-      this.prop1 = 'prop1';
-    };
-    Obj.prototype.prop2 = 'prop2';
-    var obj = new Obj();
-    var res = {};
-
-    miniAssign.assign(res, obj);
-    expect(res).to.contain.all.keys('prop1');
-    expect(res).to.not.contain.keys('prop2');
-
-  });
-
-
-  it('expect assign() to throw if target is null or undefined', function() {
-
-    expect(function() {
-      miniAssign.assign(null);
-    }).throw(TypeError);
-
-    expect(function() {
-      miniAssign.assign(undefined);
-    }).throw(TypeError);
-
-  });
-
-  it('expect assign() to accept null and undefined source', function() {
-
-    var obj = {};
-    var res;
-
-    res = miniAssign.assign(obj, null);
-    expect(res).to.deep.equals(obj);
-
-
-    res = miniAssign.assign(obj, undefined);
-    expect(res).to.deep.equals(obj);
-
-  });
-
-
-});
+var completeAssign = require('../');
 
 
 describe('#completAssign()', function() {
@@ -103,7 +20,7 @@ describe('#completAssign()', function() {
            }
     };
 
-    var res = miniAssign.completeAssign({}, obj);
+    var res = completeAssign({}, obj);
 
     expect(res).eql(obj);
     expect(res).to.contain.all.keys('foo', 'bar');
@@ -121,7 +38,7 @@ describe('#completAssign()', function() {
     obj[symA] = valA;
     obj[symB] = valB;
 
-    var res = miniAssign.completeAssign({}, obj);
+    var res = completeAssign({}, obj);
 
     var objectSymbols = Object.getOwnPropertySymbols(res);
     expect(objectSymbols).to.have.length(2);
@@ -138,7 +55,7 @@ describe('#completAssign()', function() {
     var symC = Symbol('c');
     Object.defineProperty(obj, symC, { value: 8675309, writable: false, enumerable: false });
 
-    var res = miniAssign.completeAssign({}, obj);
+    var res = completeAssign({}, obj);
 
     var objectSymbols = Object.getOwnPropertySymbols(res);
     expect(objectSymbols).to.have.length(0);
