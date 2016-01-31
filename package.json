@@ -1,6 +1,6 @@
 {
   "name": "mini-complete-assign",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Yet another completeAssign() based on Mozilla article",
   "main": "./index.js",
   "engines": {
@@ -32,7 +32,7 @@
     "coverall": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
-      "object,assign,completeAssign"
+    "object,assign,completeAssign"
   ],
   "author": "Alexander <alykoshin@gmail.com>",
   "license": "MIT",
@@ -44,8 +44,7 @@
     "url": "https://github.com/alykoshin/mini-complete-assign/issues"
   },
   "homepage": "https://github.com/alykoshin/mini-complete-assign",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^3.4.1",
     "coveralls": "^2.11.4",
