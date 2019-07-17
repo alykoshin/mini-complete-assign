@@ -2,65 +2,74 @@
 
 /* globals describe, it */
 
-var chai = require('chai');
+const chai = require('chai');
 //var should = chai.should();
-var expect = chai.expect;
+const expect = chai.expect;
 
-var completeAssign = require('../');
+const completeAssign = require('../');
 
 
 describe('#completAssign()', function() {
 
 
   it('expect completeAssign() to copy getters', function() {
-    var obj = {
+    const obj = {
       foo: 1,
-           get bar() {
-             return 2;
-           }
+      get bar() {
+        return 2;
+      }
     };
 
-    var res = completeAssign({}, obj);
+    const res = completeAssign({}, obj);
 
     expect(res).eql(obj);
+    console.log('res:', res);
+
     expect(res).to.contain.all.keys('foo', 'bar');
+    console.log('res:', res);
+
     expect(res.bar).to.be.a('number');
+    console.log('res:', res.bar);
+
     expect(res.bar).equals(2);
+    console.log('res:', res.bar);
   });
+
 
   it('expect completeAssign() to copy symbol properties', function() {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols
-    var obj = {};
-    var symA = Symbol('a');
-    var valA = 'localSymbol';
-    var symB = Symbol.for('symB');
-    var valB = 'globalSymbol';
+    const obj = {};
+    const symA = Symbol('a');
+    const valA = 'localSymbol';
+    const symB = Symbol.for('symB');
+    const valB = 'globalSymbol';
     obj[symA] = valA;
     obj[symB] = valB;
 
-    var res = completeAssign({}, obj);
+    const res = completeAssign({}, obj);
 
-    var objectSymbols = Object.getOwnPropertySymbols(res);
+    const objectSymbols = Object.getOwnPropertySymbols(res);
     expect(objectSymbols).to.have.length(2);
     expect(obj[symA] === valA);
     expect(obj[symB] === valB);
   });
 
+
   it('expect completeAssign() to not copy symbol properties with non-enumerable descriptors', function() {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols
-    var obj = {};
+    const obj = {};
     Object.defineProperty(obj, 'baz', { value: 8675309, writable: false, enumerable: false });
     //var d = Object.getOwnPropertyDescriptor(obj, 'baz');
     // // d is { value: 8675309, writable: false, enumerable: false, configurable: false }
-    var symC = Symbol('c');
+    const symC = Symbol('c');
     Object.defineProperty(obj, symC, { value: 8675309, writable: false, enumerable: false });
 
-    var res = completeAssign({}, obj);
+    expect( Object.getOwnPropertyNames(obj) ).to.have.length(1);
+    expect( Object.getOwnPropertySymbols(obj) ).to.have.length(1);
 
-    var objectSymbols = Object.getOwnPropertySymbols(res);
-    expect(objectSymbols).to.have.length(0);
+    const res = completeAssign({}, obj);
+
+    expect( Object.getOwnPropertyNames(res) ).to.have.length(0);
+    expect( Object.getOwnPropertySymbols(res) ).to.have.length(0);
   });
-
-
-
 });
